@@ -1,0 +1,92 @@
+# crud_estudiantes.py
+
+estudiantes = []
+siguiente_id = 1
+
+def crear_estudiante(nombre, email, carrera):
+    global siguiente_id
+    estudiante = {
+        "id": siguiente_id,
+        "nombre": nombre,
+        "email": email,
+        "carrera": carrera
+    }
+    estudiantes.append(estudiante)
+    siguiente_id += 1
+    print(f"\n✅ Estudiante '{nombre}' agregado con ID {estudiante['id']}.")
+
+def listar_estudiantes():
+    if not estudiantes:
+        print("\n📭 No hay estudiantes registrados.")
+        return
+    print("\n📋 Lista de estudiantes:")
+    print(f"{'ID':<5} {'Nombre':<25} {'Email':<30} {'Carrera'}")
+    print("-" * 75)
+    for e in estudiantes:
+        print(f"{e['id']:<5} {e['nombre']:<25} {e['email']:<30} {e['carrera']}")
+
+def actualizar_estudiante(id_estudiante, nombre=None, email=None, carrera=None):
+    for e in estudiantes:
+        if e["id"] == id_estudiante:
+            if nombre:  e["nombre"]  = nombre
+            if email:   e["email"]   = email
+            if carrera: e["carrera"] = carrera
+            print(f"\n✏️  Estudiante ID {id_estudiante} actualizado.")
+            return
+    print(f"\n❌ No se encontró estudiante con ID {id_estudiante}.")
+
+def eliminar_estudiante(id_estudiante):
+    for e in estudiantes:
+        if e["id"] == id_estudiante:
+            estudiantes.remove(e)
+            print(f"\n🗑️  Estudiante ID {id_estudiante} eliminado.")
+            return
+    print(f"\n❌ No se encontró estudiante con ID {id_estudiante}.")
+
+def menu():
+    while True:
+        print("\n===== CRUD ESTUDIANTES =====")
+        print("1. Agregar estudiante")
+        print("2. Ver todos los estudiantes")
+        print("3. Actualizar estudiante")
+        print("4. Eliminar estudiante")
+        print("5. Salir")
+        opcion = input("Elige una opción: ").strip()
+
+        if opcion == "1":
+            nombre  = input("Nombre: ").strip()
+            email   = input("Email: ").strip()
+            carrera = input("Carrera: ").strip()
+            crear_estudiante(nombre, email, carrera)
+
+        elif opcion == "2":
+            listar_estudiantes()
+
+        elif opcion == "3":
+            listar_estudiantes()
+            try:
+                id_est  = int(input("\nID del estudiante a actualizar: "))
+                nombre  = input("Nuevo nombre  (Enter para omitir): ").strip()
+                email   = input("Nuevo email   (Enter para omitir): ").strip()
+                carrera = input("Nueva carrera (Enter para omitir): ").strip()
+                actualizar_estudiante(id_est, nombre or None, email or None, carrera or None)
+            except ValueError:
+                print("❌ ID inválido.")
+
+        elif opcion == "4":
+            listar_estudiantes()
+            try:
+                id_est = int(input("\nID del estudiante a eliminar: "))
+                eliminar_estudiante(id_est)
+            except ValueError:
+                print("❌ ID inválido.")
+
+        elif opcion == "5":
+            print("👋 ¡Hasta luego!")
+            break
+
+        else:
+            print("❌ Opción no válida.")
+
+if __name__ == "__main__":
+    menu()
